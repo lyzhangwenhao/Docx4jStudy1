@@ -1,8 +1,6 @@
 package com.zzqa.docx4j2word;
 
-import com.zzqa.pojo.Characteristic;
-import com.zzqa.pojo.Feature;
-import com.zzqa.pojo.UnitInfo;
+import com.zzqa.pojo.*;
 import com.zzqa.utils.Docx4jUtil;
 import com.zzqa.utils.LoadDataUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -46,8 +44,8 @@ public class Docx4j2WordMain {
             String targetFilePath = "D:/AutoExport";
             String targetFile = targetFilePath + "/" + fileName;
             //PageContent2的数据准备
-            //List<Characteristic> characteristicList
             List<Characteristic> characteristicList = createData();
+            List<List<Waveform>> chartData = createChartData();
             //TODO 删除下面输出
 //            characteristicList.stream().forEach(l->{
 //                l.stream().forEach(s->{
@@ -71,7 +69,7 @@ public class Docx4j2WordMain {
             pageContent2.createPageContent2(wpMLPackage, characteristicList);
             //文件内容3：震动图谱
             PageContent3 pageContent3 = new PageContent3();
-//            pageContent3.createPageContent3(wpMLPackage, characteristicList, 0);
+            pageContent3.createPageContent3(wpMLPackage, chartData, 0);
             //文件内容4：补充说明
             PageContent4 pageContent4 = new PageContent4();
             pageContent4.createPageContent4(wpMLPackage);
@@ -144,6 +142,96 @@ public class Docx4j2WordMain {
         return characteristicList;
     }
 
+
+    public static List<List<Waveform>> createChartData(){
+        Random random = new Random();
+        List<List<Waveform>> list = new ArrayList<>();
+        for (int j=0; j<5; j++){
+            List<Waveform> list1 = new ArrayList<>();
+            for (int i=0; i<6; i++){
+                String machineName = "机组"+(j+1);
+                String positionName = "测点"+(i+1);
+                String level = random.nextInt(2)==1?"报警":"预警";
+                Waveform waveform = createWaveform(machineName, positionName, level);
+                list1.add(waveform);
+            }
+            list.add(list1);
+        }
+        return list;
+    }
+
+    public static Waveform createWaveform(String machineName,String positionName, String level){
+        Waveform waveform = new Waveform();
+        //趋势图
+        String dataX1 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/趋势图X.txt");
+        String[] colKeys = dataX1.split(",");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+        simpleDateFormat.applyPattern("yyyy/MM/dd HH:mm");
+        long [] colKeys1 = new long[colKeys.length];    //趋势图X
+        for (int i=0; i<colKeys.length; i++){
+            try {
+                Date parse = simpleDateFormat.parse(colKeys[i]);
+                colKeys1[i] = parse.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        String dataY1 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/趋势图Y.txt");
+        double[][] data1 = string2DoubleArray(dataY1);  //趋势图Y
+        //波形图
+        String dataX2 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/波形图X.txt");
+        String[] colKeys2 = dataX2.split(",");  //波形图X
+        String dataY2 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/波形图Y.txt");
+        double[][] data2 = string2DoubleArray(dataY2);  //波形图Y
+        //频谱图
+        String dataX3 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/频谱图X.txt");
+        String[] colKeys3 = dataX3.split(",");  //频谱图X
+        String dataY3 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/频谱图Y.txt");
+        double[][] data3 = string2DoubleArray(dataY3);  //频谱图Y
+        //包络图
+        String dataX4 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/包络图X.txt");
+        String[] colKeys4 = dataX4.split(",");  //包络图X
+        String dataY4 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/包络图Y.txt");
+        double[][] data4 = string2DoubleArray(dataY4);  //包络图Y
+
+
+        //趋势图集合
+        WaveformChild waveformChild11 = new WaveformChild();
+        waveformChild11.setFeatureName("峰值");
+        waveformChild11.setValue_x(colKeys1);
+        waveformChild11.setValue(data1);
+
+        WaveformChild waveformChild12 = new WaveformChild();
+        waveformChild12.setFeatureName("有效值");
+        waveformChild12.setValue_x(colKeys1);
+        waveformChild12.setValue(data1);
+
+        List<WaveformChild> waveformChildList = new ArrayList<>();
+        waveformChildList.add(waveformChild11);
+        waveformChildList.add(waveformChild12);
+        //波形图
+        WaveformChild waveformChild2 = new WaveformChild();
+        waveformChild2.setWave_x(string2Double(colKeys2));
+        waveformChild2.setValue(data2);
+        //频谱图
+        WaveformChild waveformChild3 = new WaveformChild();
+        waveformChild3.setWave_x(string2Double(colKeys3));
+        waveformChild3.setValue(data3);
+        //包络图
+        WaveformChild waveformChild4 = new WaveformChild();
+        waveformChild4.setWave_x(string2Double(colKeys4));
+        waveformChild4.setValue(data4);
+
+        waveform.setMachineName(machineName);
+        waveform.setPositionName(positionName);
+        waveform.setLevel(level);
+        waveform.setWave(waveformChild2);
+        waveform.setSpectrum(waveformChild3);
+        waveform.setSpm(waveformChild4);
+        waveform.setList(waveformChildList);
+
+        return waveform;
+    }
     /**
      * 将数据转换为double数组
      *

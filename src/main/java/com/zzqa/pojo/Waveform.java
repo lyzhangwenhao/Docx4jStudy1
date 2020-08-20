@@ -10,10 +10,19 @@ public class Waveform {
 
     private String machineName;//机组名
     private String positionName;//机组下单个测点名称
+    private String level;   //报警或预警
     private WaveformChild wave;//波形图
     private WaveformChild spm;//包络图
     private WaveformChild spectrum;//频谱图
     private List<WaveformChild> list;//趋势图
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     public String getMachineName() {
         return machineName;
