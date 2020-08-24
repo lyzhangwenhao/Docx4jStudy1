@@ -259,8 +259,6 @@ public class Docx4jUtil {
     public static String getDate(Date date){
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("yyyy年M月d日");
-        //TODO 删除输出语句
-        System.out.println("转换时间：" + sdf.format(date));
         return sdf.format(date);
     }
 }

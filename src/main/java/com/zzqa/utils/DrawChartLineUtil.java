@@ -56,8 +56,6 @@ public class DrawChartLineUtil {
         File file = new File(lineFilePath);
         try {
             ImageIO.write(bufferedImage, "png",file);
-            // TODO 删除输出
-            System.out.println(title+"折线图完成");
         } catch (IOException e) {
             e.printStackTrace();
         }

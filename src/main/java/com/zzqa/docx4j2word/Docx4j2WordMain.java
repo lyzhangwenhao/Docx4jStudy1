@@ -46,14 +46,6 @@ public class Docx4j2WordMain {
             //PageContent2的数据准备
             List<Characteristic> characteristicList = createData();
             List<List<Waveform>> chartData = createChartData();
-            //TODO 删除下面输出
-//            characteristicList.stream().forEach(l->{
-//                l.stream().forEach(s->{
-//                    s.stream().forEach(p->{
-//                        System.out.println(p.toString());
-//                    });
-//                });
-//            });
 
 
             Cover cover = new Cover();
@@ -266,8 +258,6 @@ public class Docx4j2WordMain {
     public static String getDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("yyyy年M月d日");
-        //TODO 删除输出语句
-        System.out.println("转换时间：" + sdf.format(date)); // 输出已经格式化的现在时间（24小时制）
         return sdf.format(date);
     }
 }

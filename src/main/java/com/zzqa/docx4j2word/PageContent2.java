@@ -81,18 +81,18 @@ public class PageContent2 {
                         for (Feature feature:f_list){
                             if ("预警".equals(feature.getLevel()) || "报警".equals(feature.getLevel())) {
                                 dateTr = factory.createTr();
-                                addTableTc(dateTr, name1, 1100, false, "black");
-                                addTableTc(dateTr, name2, 1500, false, "black");
-                                addTableTc(dateTr, name3, 1500, false, "black");
-                                addTableTc(dateTr, String.valueOf(feature.getCount()), 1100, false, "black");
-                                addTableTc(dateTr, feature.getValve(), 1100, false, "black");
-                                addTableTc(dateTr, feature.getCodeName(), 1100, false, "black");
+                                addTableTc(dateTr, name1, 1200, false, "black");
+                                addTableTc(dateTr, name2, 1200, false, "black");
+                                addTableTc(dateTr, name3, 1200, false, "black");
+                                addTableTc(dateTr, String.valueOf(feature.getCount()), 1200, false, "black");
+                                addTableTc(dateTr, feature.getValve(), 1200, false, "black");
+                                addTableTc(dateTr, feature.getCodeName(), 1200, false, "black");
                                 addTableTc(dateTr, feature.getMaxValue(), 1800, false, "black");
                                 //根据报警等级添加
                                 if ("预警".equals(feature.getLevel())) {
-                                    addTableTc(dateTr, feature.getLevel(), 1100, true, "#92d050");
+                                    addTableTc(dateTr, feature.getLevel(), 1200, true, "#92d050");
                                 } else if ("报警".equals(feature.getLevel())) {
-                                    addTableTc(dateTr, feature.getLevel(), 1100, true, "#ff0000");
+                                    addTableTc(dateTr, feature.getLevel(), 1200, true, "#ff0000");
                                 }
                                 currentLine++;
                                 num++;
@@ -131,14 +131,14 @@ public class PageContent2 {
         tbl.setTblPr(tblPr);
 
         //表格表头
-        addTableTc(tr, "报警机组", 1100, true, "black");
-        addTableTc(tr, "报警部件", 1500, true, "black");
-        addTableTc(tr, "报警测点", 1500, true, "black");
-        addTableTc(tr, "报警次数", 1100, true, "black");
-        addTableTc(tr, "报警门限", 1100, true, "black");
-        addTableTc(tr, "报警类型", 1100, true, "black");
+        addTableTc(tr, "报警机组", 1200, true, "black");
+        addTableTc(tr, "报警部件", 1200, true, "black");
+        addTableTc(tr, "报警测点", 1200, true, "black");
+        addTableTc(tr, "报警次数", 1200, true, "black");
+        addTableTc(tr, "报警门限", 1200, true, "black");
+        addTableTc(tr, "报警类型", 1200, true, "black");
         addTableTc(tr, "最大报警特征值", 1800, true, "black");
-        addTableTc(tr, "报警等级", 1100, true, "black");
+        addTableTc(tr, "报警等级", 1200, true, "black");
         //将tr添加到table中
         tbl.getContent().add(tr);
     }
